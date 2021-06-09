@@ -1,23 +1,28 @@
-import { useEffect } from "react";
-import 'bulma/css/bulma.min.css';
-import './App.css';
-import FlagsData from "./FlagsData";
+import './Styles.css';
+import SelectFlags from "./SelectFlags";
 
 function App() {
-    // When page load complete
-    useEffect(() => {
-        FlagsData.getAllNationalFlags().then((data) => {
-            console.log(data.data);
-        });
-    }, []);
-    
     return (
-        <div className="App">
-            <header className="App-header">
-                <p>
-                    Hello World
-                </p>
-            </header>
+        <div>
+            <section className="hero is-dark">
+                <div className="hero-body">
+                    <div className="container">
+                        <h1 className="title">National Diversity Barcodes</h1>
+                    </div>
+                </div>
+            </section>
+            
+            <section className="section">
+                <div className="container">
+                    <SelectFlags/>
+                </div>
+            </section>
+    
+            <footer className="footer">
+                <div className="content has-text-centered">
+                    ConnectionWorks Inc.
+                </div>
+            </footer>
         </div>
     );
 }
