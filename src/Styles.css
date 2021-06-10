@@ -1,0 +1,4 @@
+.country-table-container {
+    height: 15rem;
+    overflow-y: scroll;
+}

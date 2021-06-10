@@ -13,7 +13,7 @@ function App() {
             </section>
             
             <section className="section">
-                <div className="container">
+                <div className="container ">
                     <SelectFlags/>
                 </div>
             </section>
