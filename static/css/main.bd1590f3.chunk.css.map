@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/Styles.css"],"names":[],"mappings":"AAAA,yBACI,YAAa,CACb,iBACJ","file":"main.bd1590f3.chunk.css","sourcesContent":[".country-table-container {\n    height: 15rem;\n    overflow-y: scroll;\n}\n\n.flag-image {\n}\n"]}
