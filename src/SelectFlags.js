@@ -60,7 +60,14 @@ function SelectFlags() {
             </div>
             
             <div className="column">
-            
+                <strong>Selected countries</strong>
+                <div className="columns is-mobile">
+                    {selectedFlagsData.map((flagData) =>
+                        <div className="column" key={flagData.alpha3Code}>
+                            <img className="image flag-image" src={flagData.flag} alt={flagData.name}/>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
