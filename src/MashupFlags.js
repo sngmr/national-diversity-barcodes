@@ -3,7 +3,7 @@ import Canvg from 'canvg';
 import FlagsData from "./FlagsData";
 import {getImageColorData} from "./ImageDetermine";
 
-function SelectFlags() {
+function MashupFlags() {
     const [flagsData, setFlagsData] = useState([]);
     const [selectedFlagsData, setSelectedFlagsData] = useState([]);
     const [selectedFlagsColorData, setSelectedFlagsColorData] = useState([]);
@@ -123,4 +123,4 @@ function SelectFlags() {
     );
 }
 
-export default SelectFlags;
+export default MashupFlags;

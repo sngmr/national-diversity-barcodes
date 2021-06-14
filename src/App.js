@@ -1,4 +1,4 @@
-import SelectFlags from "./SelectFlags";
+import MashupFlags from "./MashupFlags";
 
 function App() {
     return (
@@ -13,7 +13,7 @@ function App() {
             
             <section className="section">
                 <div className="container ">
-                    <SelectFlags/>
+                    <MashupFlags/>
                 </div>
             </section>
     

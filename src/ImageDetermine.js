@@ -36,12 +36,13 @@ function getImagePixelArrayFromCanvas(canvas, pixelCount, quality) {
 function createPixelArray(pixels, pixelCount, quality) {
     const pixelArray = [];
     
-    for (let i = 0, offset, r, g, b, a; i < pixelCount; i = i + quality) {
+    for (let i = 0, offset, r, g, b; i < pixelCount; i = i + quality) {
+    // for (let i = 0, offset, r, g, b, a; i < pixelCount; i = i + quality) {
         offset = i * 4;
-        r = pixels[offset + 0];
+        r = pixels[offset];
         g = pixels[offset + 1];
         b = pixels[offset + 2];
-        a = pixels[offset + 3]; // Unused because flag has no opaque... I think
+        // a = pixels[offset + 3]; // Unused because flag has no opaque... I think
         
         pixelArray.push([r, g, b]);
     }
