@@ -46,6 +46,10 @@ function SelectFlags() {
         );
     }
     
+    const onGeneratePressed = () => {
+    
+    }
+    
     return (
         <div className="columns">
             <div className="column">
@@ -68,6 +72,10 @@ function SelectFlags() {
                         </div>
                     )}
                 </div>
+            </div>
+            
+            <div className="column">
+                <button className="button is-primary" onClick={onGeneratePressed}>Generate</button>
             </div>
         </div>
     );
