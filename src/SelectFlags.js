@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Canvg from 'canvg';
 import FlagsData from "./FlagsData";
 
 function SelectFlags() {
@@ -15,6 +16,15 @@ function SelectFlags() {
     // When selected flags
     useEffect(() => {
         console.log(selectedFlagsData);
+    
+        // Draw flag SVG image to the canvas for manipulating
+        selectedFlagsData.forEach((flagData) => {
+            const canvas = document.getElementById('canvas_' + flagData.alpha3Code);
+            const ctx = canvas.getContext('2d');
+            Canvg.from(ctx, flagData.flag).then((canvg) => {
+                canvg.render();
+            });
+        });
     }, [selectedFlagsData]);
     
     // Create TR country node
@@ -46,9 +56,7 @@ function SelectFlags() {
         );
     }
     
-    const onGeneratePressed = () => {
-    
-    }
+    const onGeneratePressed = () => {}
     
     return (
         <div className="columns">
@@ -68,7 +76,8 @@ function SelectFlags() {
                 <div className="columns is-mobile">
                     {selectedFlagsData.map((flagData) =>
                         <div className="column" key={flagData.alpha3Code}>
-                            <img className="image flag-image" src={flagData.flag} alt={flagData.name}/>
+                            {/*<img className="image flag-image" src={flagData.flag} alt={flagData.name}/>*/}
+                            <canvas id={"canvas_" + flagData.alpha3Code} className="flag-image-canvas" />
                         </div>
                     )}
                 </div>
