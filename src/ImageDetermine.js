@@ -20,8 +20,8 @@ export function getImageColorData(canvas) {
     const countedColorDataListSorted = countedColorDataList.sort((a, b) => {
         return b.count - a.count;
     });
-    console.log(countedColorDataListSorted);
-    console.log(pixelCount);
+    // console.log(countedColorDataListSorted);
+    // console.log(pixelCount);
     
     // Filter at least N% of area that color draw
     return countedColorDataListSorted.filter(v => v.count >= pixelCount * filterRate);

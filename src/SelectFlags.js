@@ -23,7 +23,11 @@ function SelectFlags() {
             const canvas = document.getElementById('canvas_' + flagData.alpha3Code);
             const ctx = canvas.getContext('2d');
             Canvg.from(ctx, flagData.flag).then((canvg) => {
-                canvg.render();
+                canvg.render().then(() => {
+                    // Modify display size based on the canvas (=svg) size
+                    canvas.style.width = "120px";
+                    canvas.style.height = (canvas.height * 120 / canvas.width) + 'px';
+                });
             });
         });
     }, [selectedFlagsData]);
@@ -81,14 +85,12 @@ function SelectFlags() {
             
             <div className="column">
                 <strong>Selected countries</strong>
-                <div className="columns is-mobile">
-                    {selectedFlagsData.map((flagData) =>
-                        <div className="column" key={flagData.alpha3Code}>
-                            {/*<img className="image flag-image" src={flagData.flag} alt={flagData.name}/>*/}
-                            <canvas id={"canvas_" + flagData.alpha3Code} className="flag-image-canvas" />
-                        </div>
-                    )}
-                </div>
+                {selectedFlagsData.map((flagData) =>
+                    <div key={flagData.alpha3Code}>
+                        <h4>{flagData.name}</h4>
+                        <canvas id={"canvas_" + flagData.alpha3Code} className="flag-image-canvas" />
+                    </div>
+                )}
             </div>
             
             <div className="column">
