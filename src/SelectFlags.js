@@ -103,7 +103,7 @@ function SelectFlags() {
             </div>
             
             <div className="column">
-                <strong>Selected countries color data</strong>
+                <strong>Selected flags color data</strong>
                 {selectedFlagsColorData.map((flagDataAndColorData) =>
                     <div key={"selected_analyzed_" + flagDataAndColorData.flagData.alpha3Code}>
                         <h4>{flagDataAndColorData.flagData.name}</h4>
