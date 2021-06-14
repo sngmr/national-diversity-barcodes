@@ -8,5 +8,4 @@ const createFlagsDataInstance = function() {
     }
 }
 
-const FlagsData = createFlagsDataInstance();
-export default FlagsData;
+export default createFlagsDataInstance();

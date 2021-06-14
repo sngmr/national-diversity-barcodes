@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Canvg from 'canvg';
+import * as ImageDetermine from "./ImageDetermine";
 import FlagsData from "./FlagsData";
 
 function SelectFlags() {
@@ -17,7 +18,7 @@ function SelectFlags() {
     useEffect(() => {
         console.log(selectedFlagsData);
     
-        // Draw flag SVG image to the canvas for manipulating
+        // Draw flag SVG image to the canvas for image manipulating
         selectedFlagsData.forEach((flagData) => {
             const canvas = document.getElementById('canvas_' + flagData.alpha3Code);
             const ctx = canvas.getContext('2d');
@@ -56,7 +57,15 @@ function SelectFlags() {
         );
     }
     
-    const onGeneratePressed = () => {}
+    // WHen "Generate" button pressed
+    const onGeneratePressed = () => {
+        selectedFlagsData.forEach((flagData) => {
+            // TODO: とりあえず全ピクセルの色情報を取得するまでできた
+            const pixelArray =
+                ImageDetermine.getImagePixelArrayFromCanvas(document.getElementById('canvas_' + flagData.alpha3Code));
+            console.log(pixelArray);
+        });
+    }
     
     return (
         <div className="columns">
