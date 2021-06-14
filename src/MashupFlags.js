@@ -63,6 +63,7 @@ function MashupFlags() {
         );
     }
     
+    // When analyze color button pressed
     const onAnalyzeColorsButtonPressed = () => {
         const newSelectedFlagsColorData  = [];
         selectedFlagsData.forEach((flagData) => {
@@ -111,7 +112,7 @@ function MashupFlags() {
                             {flagDataAndColorData.colorData.map(colorData => (
                                 <div key={"color_sample_" + flagDataAndColorData.flagData.alpha3Code + "_" + colorData.color}>
                                     <span style={{border:"1px solid gray", backgroundColor:colorData.color}}>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    <span> {colorData.color}, {colorData.count}px</span>
+                                    <span> {colorData.color}, {colorData.area}%({colorData.count}px)</span>
                                 </div>
                             ))}
                         </div>
