@@ -6,6 +6,7 @@ import {getImageColorData} from "./ImageDetermine";
 function SelectFlags() {
     const [flagsData, setFlagsData] = useState([]);
     const [selectedFlagsData, setSelectedFlagsData] = useState([]);
+    const [selectedFlagsColorData, setSelectedFlagsColorData] = useState([]);
     
     // When page load complete
     useEffect(() => {
@@ -62,21 +63,15 @@ function SelectFlags() {
         );
     }
     
-    // Create flag color sample container
-    const createCountryFlagColorSample = (flagData) => {
-        // TODO: ↓のLoadが終わったあとじゃないとエラーになる...
-        const colorDataList = getImageColorData(document.getElementById('canvas_' + flagData.alpha3Code));
-        return (
-            <div>
-                {colorDataList.map(colorData => (
-                    <div className="level">
-                        <div className="level-item"
-                             style={{width:"2rem", height:"2rem", border: "1px solid gray", backgroundColor: colorData.color}} />
-                        <div className="level-item">{colorData.color}</div>
-                    </div>
-                ))}
-            </div>
-        )
+    const onAnalyzeColorsButtonPressed = () => {
+        const newSelectedFlagsColorData  = [];
+        selectedFlagsData.forEach((flagData) => {
+            newSelectedFlagsColorData.push({
+                flagData: flagData,
+                colorData: getImageColorData(document.getElementById('canvas_' + flagData.alpha3Code)),
+            });
+        });
+        setSelectedFlagsColorData(newSelectedFlagsColorData);
     };
     
     return (
@@ -94,15 +89,33 @@ function SelectFlags() {
             
             <div className="column">
                 <strong>Selected countries</strong>
+                <button
+                    onClick={onAnalyzeColorsButtonPressed}
+                    className="button is-small is-primary is-outlined"
+                    style={{marginLeft:'10px'}}>Analyze colors -></button>
+                
                 {selectedFlagsData.map((flagData) =>
-                    <div className="columns is-mobile" key={flagData.alpha3Code}>
-                        <div className="column">
-                            <h4>{flagData.name}</h4>
-                            <canvas id={"canvas_" + flagData.alpha3Code} />
+                    <div key={"selected_" + flagData.alpha3Code}>
+                        <h4>{flagData.name}</h4>
+                        <canvas id={"canvas_" + flagData.alpha3Code} />
+                    </div>
+                )}
+            </div>
+            
+            <div className="column">
+                <strong>Selected countries color data</strong>
+                {selectedFlagsColorData.map((flagDataAndColorData) =>
+                    <div key={"selected_analyzed_" + flagDataAndColorData.flagData.alpha3Code}>
+                        <h4>{flagDataAndColorData.flagData.name}</h4>
+                        <div>
+                            {flagDataAndColorData.colorData.map(colorData => (
+                                <div key={"color_sample_" + flagDataAndColorData.flagData.alpha3Code + "_" + colorData.color}>
+                                    <span style={{border:"1px solid gray", backgroundColor:colorData.color}}>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    <span> {colorData.color}, {colorData.count}px</span>
+                                </div>
+                            ))}
                         </div>
-                        <div className="column">
-                            {/*{createCountryFlagColorSample(flagData)}*/}
-                        </div>
+                        <hr style={{margin:0,marginBottom:'1rem'}}/>
                     </div>
                 )}
             </div>
