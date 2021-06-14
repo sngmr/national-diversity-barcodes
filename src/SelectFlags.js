@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Canvg from 'canvg';
-import * as ImageDetermine from "./ImageDetermine";
 import FlagsData from "./FlagsData";
+import {getImageColorData} from "./ImageDetermine";
 
 function SelectFlags() {
     const [flagsData, setFlagsData] = useState([]);
@@ -60,10 +60,9 @@ function SelectFlags() {
     // WHen "Generate" button pressed
     const onGeneratePressed = () => {
         selectedFlagsData.forEach((flagData) => {
-            // TODO: とりあえず全ピクセルの色情報を取得するまでできた
-            const pixelArray =
-                ImageDetermine.getImagePixelArrayFromCanvas(document.getElementById('canvas_' + flagData.alpha3Code));
-            console.log(pixelArray);
+            // TODO: とりあえずよく使われているピクセルの色情報を取得するまでできた
+            const colorData = getImageColorData(document.getElementById('canvas_' + flagData.alpha3Code));
+            console.log(colorData);
         });
     }
     
