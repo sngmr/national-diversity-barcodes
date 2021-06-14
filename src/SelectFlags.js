@@ -27,6 +27,7 @@ function SelectFlags() {
                     // Modify display size based on the canvas (=svg) size
                     canvas.style.width = "120px";
                     canvas.style.height = (canvas.height * 120 / canvas.width) + 'px';
+                    canvas.style.border = "1px solid gray";
                 });
             });
         });
@@ -61,20 +62,28 @@ function SelectFlags() {
         );
     }
     
-    // WHen "Generate" button pressed
-    const onGeneratePressed = () => {
-        selectedFlagsData.forEach((flagData) => {
-            // TODO: とりあえずよく使われているピクセルの色情報を取得するまでできた
-            const colorData = getImageColorData(document.getElementById('canvas_' + flagData.alpha3Code));
-            console.log(colorData);
-        });
-    }
+    // Create flag color sample container
+    const createCountryFlagColorSample = (flagData) => {
+        // TODO: ↓のLoadが終わったあとじゃないとエラーになる...
+        const colorDataList = getImageColorData(document.getElementById('canvas_' + flagData.alpha3Code));
+        return (
+            <div>
+                {colorDataList.map(colorData => (
+                    <div className="level">
+                        <div className="level-item"
+                             style={{width:"2rem", height:"2rem", border: "1px solid gray", backgroundColor: colorData.color}} />
+                        <div className="level-item">{colorData.color}</div>
+                    </div>
+                ))}
+            </div>
+        )
+    };
     
     return (
         <div className="columns">
             <div className="column">
                 <strong>Select countries</strong>
-                <div className="table-container country-table-container">
+                <div className="table-container" style={{height:"18rem",overflowY:"scroll"}}>
                     <table className="table is-bordered is-striped is-narrow is-hoverable">
                         <tbody>
                         {flagsData.map((flagData) => { return createCountryTr(flagData) })}
@@ -86,15 +95,16 @@ function SelectFlags() {
             <div className="column">
                 <strong>Selected countries</strong>
                 {selectedFlagsData.map((flagData) =>
-                    <div key={flagData.alpha3Code}>
-                        <h4>{flagData.name}</h4>
-                        <canvas id={"canvas_" + flagData.alpha3Code} className="flag-image-canvas" />
+                    <div className="columns is-mobile" key={flagData.alpha3Code}>
+                        <div className="column">
+                            <h4>{flagData.name}</h4>
+                            <canvas id={"canvas_" + flagData.alpha3Code} />
+                        </div>
+                        <div className="column">
+                            {/*{createCountryFlagColorSample(flagData)}*/}
+                        </div>
                     </div>
                 )}
-            </div>
-            
-            <div className="column">
-                <button className="button is-primary" onClick={onGeneratePressed}>Generate</button>
             </div>
         </div>
     );

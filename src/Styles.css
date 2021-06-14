@@ -1,9 +1,0 @@
-.country-table-container {
-    height: 15rem;
-    overflow-y: scroll;
-}
-
-/* FIXME: Just showing */
-.flag-image-canvas {
-    border: 1px solid gray;
-}

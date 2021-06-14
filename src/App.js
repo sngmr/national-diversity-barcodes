@@ -1,4 +1,3 @@
-import './Styles.css';
 import SelectFlags from "./SelectFlags";
 
 function App() {
