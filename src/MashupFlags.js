@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import Canvg from 'canvg';
 import FlagsData from "./FlagsData";
-import {getImageColorData} from "./ImageDetermine";
+import * as ImageDetermine from "./ImageDetermine";
+import * as FlagGen from "./FlagGenerator";
 
 function MashupFlags() {
     const [flagsData, setFlagsData] = useState([]);
@@ -17,7 +18,7 @@ function MashupFlags() {
     
     // When selected flags
     useEffect(() => {
-        console.log(selectedFlagsData);
+        // console.log(selectedFlagsData);
     
         // Draw flag SVG image to the canvas for image manipulating
         selectedFlagsData.forEach((flagData) => {
@@ -69,11 +70,34 @@ function MashupFlags() {
         selectedFlagsData.forEach((flagData) => {
             newSelectedFlagsColorData.push({
                 flagData: flagData,
-                colorData: getImageColorData(document.getElementById('canvas_' + flagData.alpha3Code)),
+                colorData: ImageDetermine.getImageColorData(document.getElementById('canvas_' + flagData.alpha3Code)),
             });
         });
         setSelectedFlagsColorData(newSelectedFlagsColorData);
     };
+    
+    // When generate flags button pressed
+    const onGenerateFlagsButtonPressed = (isHorizontalBorder = false) => {
+        // Optimize data
+        const colors = []
+        selectedFlagsColorData.map((flagsData) => {
+            flagsData.colorData.map((colorData) => {
+                colors.push(colorData.color);
+            });
+        });
+        
+        const svg = FlagGen.generate(isHorizontalBorder, colors);
+        
+        const canvas = document.getElementById('canvas_generated');
+        const ctx = canvas.getContext('2d');
+        Canvg.from(ctx, svg).then((canvg) => {
+            canvg.render().then(() => {
+                // Modify display size based on the canvas (=svg) size
+                canvas.style.width = "120px";
+                canvas.style.height = (canvas.height * 120 / canvas.width) + 'px';
+                canvas.style.border = "1px solid gray";
+            });
+        });    };
     
     return (
         <div className="columns">
@@ -90,10 +114,10 @@ function MashupFlags() {
             
             <div className="column">
                 <strong>Selected countries</strong>
+                <br/>
                 <button
                     onClick={onAnalyzeColorsButtonPressed}
-                    className="button is-small is-primary is-outlined"
-                    style={{marginLeft:'10px'}}>Analyze colors -></button>
+                    className="button is-small is-primary is-outlined">Analyze colors</button>
                 
                 {selectedFlagsData.map((flagData) =>
                     <div key={"selected_" + flagData.alpha3Code}>
@@ -105,6 +129,12 @@ function MashupFlags() {
             
             <div className="column">
                 <strong>Selected flags color data</strong>
+                <br/>
+                <button onClick={() => onGenerateFlagsButtonPressed(true)}
+                        className="button is-small is-primary is-outlined">Generate H flags</button>
+                <button onClick={() => onGenerateFlagsButtonPressed(false)}
+                        className="button is-small is-primary is-outlined">Generate V flags</button>
+                
                 {selectedFlagsColorData.map((flagDataAndColorData) =>
                     <div key={"selected_analyzed_" + flagDataAndColorData.flagData.alpha3Code}>
                         <h4>{flagDataAndColorData.flagData.name}</h4>
@@ -112,13 +142,28 @@ function MashupFlags() {
                             {flagDataAndColorData.colorData.map(colorData => (
                                 <div key={"color_sample_" + flagDataAndColorData.flagData.alpha3Code + "_" + colorData.color}>
                                     <span style={{border:"1px solid gray", backgroundColor:colorData.color}}>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    <span> {colorData.color}, {colorData.area}%({colorData.count}px)</span>
+                                    <span> {colorData.color}, {colorData.area}%</span>
+                                    {/*<span> {colorData.color}, {colorData.area}%({colorData.count}px)</span>*/}
                                 </div>
                             ))}
                         </div>
                         <hr style={{margin:0,marginBottom:'1rem'}}/>
                     </div>
                 )}
+            </div>
+            
+            <div className="column">
+                <strong>Generated mashup flags</strong>
+                <br/>
+                <button
+                    onClick={() => onGenerateFlagsButtonPressed(true)}
+                    className="button is-small is-primary is-outlined">Re-generate H</button>
+                <button
+                    onClick={() => onGenerateFlagsButtonPressed(false)}
+                    className="button is-small is-primary is-outlined">Re-generate V</button>
+                <div>
+                    <canvas id="canvas_generated" />
+                </div>
             </div>
         </div>
     );
