@@ -5,7 +5,7 @@ const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
 const SVG_WHITE_COLOR_RATE = 0.25;
 
-export function generate(isHorizontalBorder, colorList) {
+export function generate1(isHorizontalBorder, colorList) {
     // console.log(colorList);
     
     // root SVG element
@@ -77,4 +77,11 @@ export function generate(isHorizontalBorder, colorList) {
     // console.log(root);
     
     return svgson.stringify(root);
+}
+
+export function tidyCanvasElement(canvas, width) {
+    // Modify display size based on the canvas (=svg) size
+    canvas.style.width = width + 'px';
+    canvas.style.height = (canvas.height * width / canvas.width) + 'px';
+    canvas.style.border = "1px solid gray";
 }

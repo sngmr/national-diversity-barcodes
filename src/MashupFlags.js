@@ -5,6 +5,8 @@ import FlagsData from "./FlagsData";
 import * as ImageDetermine from "./ImageDetermine";
 import * as FlagGen from "./FlagGenerator";
 
+const CANVAS_FLAG_WIDTH = 120;
+
 function MashupFlags() {
     const [flagsData, setFlagsData] = useState([]);
     const [selectedFlagsData, setSelectedFlagsData] = useState([]);
@@ -26,12 +28,7 @@ function MashupFlags() {
             const canvas = document.getElementById('canvas_' + flagData.alpha3Code);
             const ctx = canvas.getContext('2d');
             Canvg.from(ctx, flagData.flag).then((canvg) => {
-                canvg.render().then(() => {
-                    // Modify display size based on the canvas (=svg) size
-                    canvas.style.width = "120px";
-                    canvas.style.height = (canvas.height * 120 / canvas.width) + 'px';
-                    canvas.style.border = "1px solid gray";
-                });
+                canvg.render().then(() => { FlagGen.tidyCanvasElement(canvas, CANVAS_FLAG_WIDTH) })
             });
         });
     }, [selectedFlagsData]);
@@ -77,33 +74,30 @@ function MashupFlags() {
         setSelectedFlagsColorData(newSelectedFlagsColorData);
     };
     
-    // When generate flags button pressed
+    // When generate1 flags button pressed
     const onGenerateFlagsButtonPressed = (isHorizontalBorder = false) => {
         ReactGA.event({
             category: 'Flags',
             action: 'Generate new mashup flags'
         });
         
-        // Optimize data
+        const drawCanvas = (canvasId, svg) => {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            Canvg.from(ctx, svg).then((canvg) => {
+                canvg.render().then(() => { FlagGen.tidyCanvasElement(canvas, CANVAS_FLAG_WIDTH) })
+            });
+        };
+        
+        // Pattern 1
         const colors = []
         selectedFlagsColorData.map((flagsData) => {
             flagsData.colorData.map((colorData) => {
                 colors.push(colorData.color);
             });
         });
-        
-        const svg = FlagGen.generate(isHorizontalBorder, colors);
-        
-        const canvas = document.getElementById('canvas_generated');
-        const ctx = canvas.getContext('2d');
-        Canvg.from(ctx, svg).then((canvg) => {
-            canvg.render().then(() => {
-                // Modify display size based on the canvas (=svg) size
-                canvas.style.width = "120px";
-                canvas.style.height = (canvas.height * 120 / canvas.width) + 'px';
-                canvas.style.border = "1px solid gray";
-            });
-        });    };
+        drawCanvas('canvas_generated_1', FlagGen.generate1(isHorizontalBorder, colors));
+    };
     
     return (
         <div className="columns">
@@ -168,7 +162,10 @@ function MashupFlags() {
                     onClick={() => onGenerateFlagsButtonPressed(false)}
                     className="button is-small is-primary is-outlined">Re-generate V</button>
                 <div>
-                    <canvas id="canvas_generated" />
+                    <div>
+                        <h4>Same width/height</h4>
+                        <canvas id="canvas_generated_1" />
+                    </div>
                 </div>
             </div>
         </div>
