@@ -97,6 +97,9 @@ function MashupFlags() {
             });
         });
         drawCanvas('canvas_generated_1', FlagGen.generate1(isHorizontalBorder, colors));
+        
+        // Pattern 2
+        drawCanvas('canvas_generated_2', FlagGen.generate2(isHorizontalBorder, selectedFlagsColorData));
     };
     
     return (
@@ -142,8 +145,7 @@ function MashupFlags() {
                             {flagDataAndColorData.colorData.map(colorData => (
                                 <div key={"color_sample_" + flagDataAndColorData.flagData.alpha3Code + "_" + colorData.color}>
                                     <span style={{border:"1px solid gray", backgroundColor:colorData.color}}>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    <span> {colorData.color}, {colorData.area}%</span>
-                                    {/*<span> {colorData.color}, {colorData.area}%({colorData.count}px)</span>*/}
+                                    <span> {colorData.color}, {Math.round(colorData.area * 100)}%</span>
                                 </div>
                             ))}
                         </div>
@@ -163,8 +165,12 @@ function MashupFlags() {
                     className="button is-small is-primary is-outlined">Re-generate V</button>
                 <div>
                     <div>
-                        <h4>Same width/height</h4>
+                        <h4>Pattern 1</h4>
                         <canvas id="canvas_generated_1" />
+                    </div>
+                    <div>
+                        <h4>Pattern 2</h4>
+                        <canvas id="canvas_generated_2" />
                     </div>
                 </div>
             </div>

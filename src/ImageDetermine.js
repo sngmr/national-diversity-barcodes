@@ -15,7 +15,7 @@ export function getImageColorData(canvas) {
         return total;
     }, {});
     const countedColorDataList = Object.entries(countedColorDataObject).map(([color, count]) => {
-        const area = Math.round(count / pixelCount * quality * 100);
+        const area = count / pixelCount * quality;
         return {color, count, pixelCount, area}
     });
     

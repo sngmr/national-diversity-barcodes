@@ -3,7 +3,6 @@ import shuffle from 'shuffle-array';
 
 const SVG_WIDTH = 1600;
 const SVG_HEIGHT = 900;
-const SVG_WHITE_COLOR_RATE = 0.25;
 
 // Root SVG element
 const SVG_ROOT_TEMPLATE = {
@@ -50,7 +49,7 @@ export function generate1(isHorizontalBorder, colorList) {
     
     // Calculate white color size and each color's size
     const baseLength = isHorizontalBorder ? SVG_HEIGHT : SVG_WIDTH;
-    const whiteColorLen = baseLength / colors.length * SVG_WHITE_COLOR_RATE;
+    const whiteColorLen = baseLength / colors.length * 0.25;
     const eachColorLen = (baseLength - (whiteColorLen * (colors.length - 1))) / colors.length;
     
     const root = deepCopy(SVG_ROOT_TEMPLATE);
@@ -66,6 +65,47 @@ export function generate1(isHorizontalBorder, colorList) {
         root.children.push(rect);
     }
 
+    return svgson.stringify(root);
+}
+
+export function generate2(isHorizontalBorder, flagAndColorDataList) {
+    // Retrieve color and filling rate on flag without white
+    let colorAndAreaRateList = [];
+    flagAndColorDataList.map((flagAndColorData) => {
+        const colorDataList = flagAndColorData.colorData.filter(v => v.color.toUpperCase() !== '#FFFFFF');
+        colorDataList.map((v) => {
+            colorAndAreaRateList.push({color: v.color, area: v.area});
+        });
+    });
+    colorAndAreaRateList = shuffle(colorAndAreaRateList);
+    
+    // Calculate white color length and another colors total length
+    const baseLength = isHorizontalBorder ? SVG_HEIGHT : SVG_WIDTH;
+    const whiteColorLen = baseLength / colorAndAreaRateList.length * 0.25;
+    const colorsTotalLen = baseLength - (colorAndAreaRateList.length - 1) * whiteColorLen;
+    
+    // Calculate color fill rate
+    const totalArea = colorAndAreaRateList.reduce((total, value) => total + value.area, 0);
+    for (let i = 0; i < colorAndAreaRateList.length; i++) {
+        colorAndAreaRateList[i].fillRate = colorAndAreaRateList[i].area / totalArea;
+    }
+    
+    const root = deepCopy(SVG_ROOT_TEMPLATE);
+    let colorLenTotal = 0;
+    for (let i = 0; i < colorAndAreaRateList.length; i++) {
+        const rect = deepCopy(SVG_RECT_TEMPLATE);
+        const colorLen = Math.round(colorsTotalLen * colorAndAreaRateList[i].fillRate);
+        rect.attributes = {
+            x: isHorizontalBorder ? 0 : colorLenTotal + i * whiteColorLen,
+            y: isHorizontalBorder ? colorLenTotal + i * whiteColorLen : 0,
+            width: isHorizontalBorder ? SVG_WIDTH : colorLen,
+            height: isHorizontalBorder ? colorLen : SVG_HEIGHT,
+            fill: colorAndAreaRateList[i].color,
+        };
+        colorLenTotal += colorLen;
+        root.children.push(rect);
+    }
+    
     return svgson.stringify(root);
 }
 
