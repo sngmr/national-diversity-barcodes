@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Canvg from 'canvg';
+import ReactGA from 'react-ga';
 import FlagsData from "./FlagsData";
 import * as ImageDetermine from "./ImageDetermine";
 import * as FlagGen from "./FlagGenerator";
@@ -78,6 +79,11 @@ function MashupFlags() {
     
     // When generate flags button pressed
     const onGenerateFlagsButtonPressed = (isHorizontalBorder = false) => {
+        ReactGA.event({
+            category: 'Flags',
+            action: 'Generate new mashup flags'
+        });
+        
         // Optimize data
         const colors = []
         selectedFlagsColorData.map((flagsData) => {
