@@ -28,7 +28,7 @@ function MashupFlags() {
             const canvas = document.getElementById('canvas_' + flagData.alpha3Code);
             const ctx = canvas.getContext('2d');
             Canvg.from(ctx, flagData.flag).then((canvg) => {
-                canvg.render().then(() => { FlagGen.tidyCanvasElement(canvas, CANVAS_FLAG_WIDTH) })
+                canvg.render().then(() => { tidyCanvasElement(canvas, CANVAS_FLAG_WIDTH) })
             });
         });
     }, [selectedFlagsData]);
@@ -85,7 +85,7 @@ function MashupFlags() {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
             Canvg.from(ctx, svg).then((canvg) => {
-                canvg.render().then(() => { FlagGen.tidyCanvasElement(canvas, CANVAS_FLAG_WIDTH) })
+                canvg.render().then(() => { tidyCanvasElement(canvas, CANVAS_FLAG_WIDTH) })
             });
         };
         
@@ -101,6 +101,13 @@ function MashupFlags() {
         // Pattern 2
         drawCanvas('canvas_generated_2', FlagGen.generate2(isHorizontalBorder, selectedFlagsColorData));
     };
+    
+    const tidyCanvasElement = (canvas, width) => {
+        // Modify display size based on the canvas (=svg) size
+        canvas.style.width = width + 'px';
+        canvas.style.height = (canvas.height * width / canvas.width) + 'px';
+        canvas.style.border = "1px solid gray";
+    }
     
     return (
         <div className="columns">

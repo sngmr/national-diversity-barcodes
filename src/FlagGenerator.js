@@ -109,13 +109,6 @@ export function generate2(isHorizontalBorder, flagAndColorDataList) {
     return svgson.stringify(root);
 }
 
-export function tidyCanvasElement(canvas, width) {
-    // Modify display size based on the canvas (=svg) size
-    canvas.style.width = width + 'px';
-    canvas.style.height = (canvas.height * width / canvas.width) + 'px';
-    canvas.style.border = "1px solid gray";
-}
-
 function deepCopy(org) {
     return JSON.parse(JSON.stringify(org));
 }
