@@ -25,9 +25,9 @@ function MashupFlags() {
     
         // Draw flag SVG image to the canvas for image manipulating
         selectedFlagsData.forEach((flagData) => {
-            const canvas = document.getElementById('canvas_' + flagData.alpha3Code);
+            const canvas = document.getElementById('canvas_' + flagData.iso2code);
             const ctx = canvas.getContext('2d');
-            Canvg.from(ctx, flagData.flag).then((canvg) => {
+            Canvg.from(ctx, process.env.PUBLIC_URL + '/flags/' + flagData.iso2code + '.svg').then((canvg) => {
                 canvg.render().then(() => { tidyCanvasElement(canvas, CANVAS_FLAG_WIDTH) })
             });
         });
@@ -53,7 +53,7 @@ function MashupFlags() {
         }
     
         return (
-            <tr key={flagData.alpha3Code}
+            <tr key={flagData.iso2code}
                 onClick={() => { onCountryRowClick(); }}
                 className={isSelected ? 'is-selected' : ''}
             >
@@ -68,7 +68,7 @@ function MashupFlags() {
         selectedFlagsData.forEach((flagData) => {
             newSelectedFlagsColorData.push({
                 flagData: flagData,
-                colorData: ImageDetermine.getImageColorData(document.getElementById('canvas_' + flagData.alpha3Code)),
+                colorData: ImageDetermine.getImageColorData(document.getElementById('canvas_' + flagData.iso2code)),
             });
         });
         setSelectedFlagsColorData(newSelectedFlagsColorData);
@@ -130,9 +130,9 @@ function MashupFlags() {
                     className="button is-small is-primary is-outlined">Analyze colors</button>
                 
                 {selectedFlagsData.map((flagData) =>
-                    <div key={"selected_" + flagData.alpha3Code}>
+                    <div key={"selected_" + flagData.iso2code}>
                         <h4>{flagData.name}</h4>
-                        <canvas id={"canvas_" + flagData.alpha3Code} />
+                        <canvas id={"canvas_" + flagData.iso2code} />
                     </div>
                 )}
             </div>
@@ -146,11 +146,11 @@ function MashupFlags() {
                         className="button is-small is-primary is-outlined">Generate V flags</button>
                 
                 {selectedFlagsColorData.map((flagDataAndColorData) =>
-                    <div key={"selected_analyzed_" + flagDataAndColorData.flagData.alpha3Code}>
+                    <div key={"selected_analyzed_" + flagDataAndColorData.flagData.iso2code}>
                         <h4>{flagDataAndColorData.flagData.name}</h4>
                         <div>
                             {flagDataAndColorData.colorData.map(colorData => (
-                                <div key={"color_sample_" + flagDataAndColorData.flagData.alpha3Code + "_" + colorData.color}>
+                                <div key={"color_sample_" + flagDataAndColorData.flagData.iso2code + "_" + colorData.color}>
                                     <span style={{border:"1px solid gray", backgroundColor:colorData.color}}>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     <span> {colorData.color}, {Math.round(colorData.area * 100)}%</span>
                                 </div>
